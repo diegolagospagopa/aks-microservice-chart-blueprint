@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v3.0.0 (Breking change)
+## v3.0.0 (Breaking change)
 - deployment
   - moved items at root level
   - removed create flag
@@ -29,7 +29,7 @@
 
 added tmpVolumeMount
 
-## v2.0.0 (Breking change)
+## v2.0.0 (Breaking change)
 
 fix:
 
