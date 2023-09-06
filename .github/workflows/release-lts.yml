@@ -12,7 +12,7 @@ jobs:
     steps:
 
       # Determine Release Version
-      - uses: wemogy/next-version-action@2.0.2
+      - uses: wemogy/next-version-action@2.0.3
         id: release-version
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
