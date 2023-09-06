@@ -17,7 +17,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           projects: 'Single'
-          prefix: 'microservice-chart-'
+          prefix: 'microservice-chart-2-8'
           branch: 'release/microservice-chart-2'
 
       - run: echo ${{ steps.release-version.outputs.next-version }} # Output: 1.1.2
