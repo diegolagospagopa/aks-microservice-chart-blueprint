@@ -1,4 +1,4 @@
-name: Release
+name: Release LTS
 
 on:
   workflow_dispatch:
@@ -16,9 +16,9 @@ jobs:
         id: release-version
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          projects: 'Single'
-          prefix: 'microservice-chart'
-          # branch: 'release/microservice-chart-2'
+          projects: 'Multi'
+          prefix: 'microservice-chart-'
+          branch: 'release/microservice-chart-2'
 
       - run: echo ${{ steps.release-version.outputs.next-version }} # Output: 1.1.2
       - run: echo ${{ steps.release-version.outputs.next-version-name }} # Output: v1.1.2
