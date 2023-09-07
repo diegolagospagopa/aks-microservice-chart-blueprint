@@ -56,7 +56,7 @@ jobs:
           yq -i ".version = \"${{ inputs.version }}\"" "charts/microservice-chart/Chart.yaml"
           git add "charts/microservice-chart/Chart.yaml"
           git commit -m "Bumb microservice chart version ${{ inputs.version }}"
-          git push -u origin main
+          git push -u origin ${{ github.ref_name }}
 
       - name: Setup Helm
         run: |
