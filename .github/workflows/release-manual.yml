@@ -22,6 +22,7 @@ jobs:
       - name: Check version
         run: |
           echo "Version: ${{ inputs.version }}"
+          echo "Current branch: ${{ github.ref_name }}"
 
           if ! [[ "${{ inputs.version }}" =~ ^([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
             echo "❌ version is not valid"
