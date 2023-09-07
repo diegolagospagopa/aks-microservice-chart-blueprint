@@ -23,6 +23,11 @@ jobs:
         run: |
           echo "Branch: ${{ inputs.version }}"
 
+          if ! [[ "${{ inputs.version }}" =~ ^([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "version is not a number"
+            exit 1
+          fi
+
       # - name: Get parameter
       #   run: |
       #     echo "Parameter: ${{ inputs.parameter }}"
