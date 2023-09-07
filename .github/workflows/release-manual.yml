@@ -19,28 +19,24 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN }}
 
-      - name: Get branch
+      - name: Check version
         run: |
-          echo "Branch: ${{ inputs.version }}"
+          echo "Version: ${{ inputs.version }}"
 
           if ! [[ "${{ inputs.version }}" =~ ^([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
-            echo "version is not a number"
+            echo "❌ version is not valid"
             exit 1
           fi
 
-      # - name: Get parameter
-      #   run: |
-      #     echo "Parameter: ${{ inputs.parameter }}"
+      # issue: https://github.com/helm/chart-releaser-action/issues/113
+      - name: Force tags download
+        run: |
+          git pull --tags
 
-      # # issue: https://github.com/helm/chart-releaser-action/issues/113
-      # - name: Force tags download
-      #   run: |
-      #     git pull --tags
-
-      # - name: Configure Git
-      #   run: |
-      #     git config user.name "$GITHUB_ACTOR"
-      #     git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       # - name: Semantic release
       #   uses: cycjimmy/semantic-release-action@v2
@@ -54,23 +50,20 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Bump new version
-      #   if: steps.semantic.outputs.new_release_published == 'true'
-      #   run: |
-      #     yq -i ".version = \"${{ steps.semantic.outputs.new_release_version }}\"" "charts/microservice-chart/Chart.yaml"
-      #     git add "charts/microservice-chart/Chart.yaml"
-      #     git commit -m "Bumb microservice chart version ${{ steps.semantic.outputs.new_release_version }}"
-      #     git push -u origin main
+      - name: Bump new version
+        run: |
+          yq -i ".version = \"${{ inputs.version }}\"" "charts/microservice-chart/Chart.yaml"
+          git add "charts/microservice-chart/Chart.yaml"
+          git commit -m "Bumb microservice chart version ${{ inputs.version }}"
+          git push -u origin main
 
-      # - name: Setup Helm
-      #   if: steps.semantic.outputs.new_release_published == 'true'
-      #   run: |
-      #     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-      #     chmod 700 get_helm.sh
-      #     ./get_helm.sh
+      - name: Setup Helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
 
-      # - name: Run chart-releaser
-      #   if: steps.semantic.outputs.new_release_published == 'true'
-      #   uses: helm/chart-releaser-action@v1.4.0
-      #   env:
-      #     CR_TOKEN: "${{ secrets.RELEASE_TOKEN }}"
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.5.0
+        env:
+          CR_TOKEN: "${{ secrets.RELEASE_TOKEN }}"
